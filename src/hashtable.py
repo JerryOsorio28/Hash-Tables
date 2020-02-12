@@ -9,13 +9,19 @@ class HashTable:
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
         self.size = 0
+        self.old_stor_size = None
 
 
     def _hash(self, key):
         return hash(key)
 
     def _hash_mod(self, key):
-        return self._hash(key) % self.capacity
+        # checks if the HT has been resized
+        if self.old_stor_size is None:
+            # if it has not, find modulo of current capacity
+            return self._hash(key) % self.capacity
+        # else, finds modulo of previous capacity
+        return self._hash(key) % self.old_stor_size
 
 
     def insert(self, key, value):
@@ -88,6 +94,8 @@ class HashTable:
         return None
 
     def resize(self):
+        # set's old storage to capacity before increasing it
+        self.old_stor_size = self.capacity
         # increase capacity times 2
         self.capacity *= 2
         # we make a new storage with new capacity
@@ -99,16 +107,17 @@ class HashTable:
         # we set our new storage to be our storage
         self.storage = new_storage
 
-# if __name__ == "__main__":
-#     ht = HashTable(8)
-#     ht.insert("key-0", "val-0")
-#     ht.insert("key-1", "val-1")
-#     ht.insert("key-2", "val-2")
-#     ht.insert("key-3", "val-3")
-#     ht.insert("key-4", "val-4")
-#     ht.insert("key-5", "val-5")
-#     ht.insert("key-6", "val-6")
-#     ht.insert("key-7", "val-7")
-#     ht.insert("key-8", "val-8")
-#     ht.insert("key-9", "val-9")
-#     print(ht.retrieve("key-0"))
+if __name__ == "__main__":
+    ht = HashTable(8)
+    ht.insert("key-0", "val-0")
+    ht.insert("key-1", "val-1")
+    ht.insert("key-2", "val-2")
+    ht.insert("key-3", "val-3")
+    ht.insert("key-4", "val-4")
+    ht.insert("key-5", "val-5")
+    ht.insert("key-6", "val-6")
+    ht.insert("key-7", "val-7")
+    ht.insert("key-8", "val-8")
+    ht.insert("key-9", "val-9")
+    ht.resize()
+    print(ht.retrieve("key-0"))
