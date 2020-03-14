@@ -25,6 +25,7 @@ class HashTable:
 
 
     def insert(self, key, value):
+
         index = self._hash_mod(key)
         # and we look in our HT at the position the index indicates
         node = self.storage[index]
